@@ -38,7 +38,7 @@ Por último, se puede escribir en la base de datos **AdoptMe**, de la siguiente 
 
 1. Correr la app localmente mediante ```npm run dev```
 2. Mediante herramientas como **Postman**, realizar un *Post* al *endpoint* [api/mocks/generateData](http://localhost:8080/api/mocks/generateData),
-con el *body* bajo el siguiente formato:
+con el *body* bajo el siguiente formato (recordar tener, entre los parametros de *Headers*, el valor *Content-Type* = 'application/json'):
 ```json
 {
   "users": 20,
