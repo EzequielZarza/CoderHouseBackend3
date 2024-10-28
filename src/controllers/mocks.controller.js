@@ -18,8 +18,8 @@ const generateData = async ({body: { users, pets }}, res) => {
     const mockedPets = await MockingService.generateMockingPets(pets);
 
     await Promise.all(
-      mockedUsers.map(user => usersService.create(user)),
-      mockedPets.map(pet => petsService.create(pet))
+      mockedUsers.map(async user => await usersService.create(user)),
+      mockedPets.map(async pet => await petsService.create(pet))
     );
 
     res.status(200).send({
