@@ -8,11 +8,15 @@ import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from "./routes/mocks.router.js"; 
 
+import dotenv from 'dotenv'
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT||8080;
+const DB = process.env.TESTING ? 'AdoptMeTEST' : 'AdoptMe';
 
 const connection = mongoose.connect('mongodb+srv://coderUser:coderPass@cluster0.y3pgk.mongodb.net', {
-  dbName: 'AdoptMe',
+  dbName: DB,
   useNewUrlParser: true,
 	useUnifiedTopology: true
 }, err => err ? console.log(err) :
@@ -28,6 +32,7 @@ app.use('/api/sessions',sessionsRouter);
 app.use("/api/mocks", mocksRouter); 
 
 
-app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
-
-
+app.listen(PORT,()=> { 
+  console.log(`Listening on ${PORT}`);
+  console.log(`Connected to ${DB} database`);
+})
