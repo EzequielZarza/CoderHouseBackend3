@@ -13,7 +13,8 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT||8080;
-const DB = process.env.TESTING ? 'AdoptMeTEST' : 'AdoptMe';
+const isTesting = process.env.TESTING  === 'true';
+const DB = isTesting ? 'AdoptMeTEST' : 'AdoptMe';
 
 const connection = mongoose.connect('mongodb+srv://coderUser:coderPass@cluster0.y3pgk.mongodb.net', {
   dbName: DB,
