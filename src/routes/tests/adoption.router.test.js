@@ -112,12 +112,32 @@ describe('AdoptMe Testing', () => {
         expect(_body).to.have.property('error').to.equal('Adoption not found');
   
       });
-    })
+    });
+
+    describe('Endpoint DELETE /:aid', async () => {
+      it('deletes the specific adoption created during the functional test', async () => {
+        const {statusCode, ok, _body } = await requester.delete(`/api/adoptions/${adoptionTestId}`);
+        expect(statusCode).to.equal(200);
+        expect(ok).to.be.true;
+        expect(_body).to.have.property('status').to.equal('success');
+        expect(_body).to.have.property('message').to.equal('Adoption deleted');
+      });
+
+      it('fails when adoption is no longer in database', async () => {  
+        const {statusCode, ok, _body } = await requester.delete(`/api/adoptions/${adoptionTestId}`);
+
+        expect(statusCode).to.equal(404);
+        expect(ok).to.be.false;
+        expect(_body).to.have.property('status').to.equal('error');
+        expect(_body).to.have.property('error');
+        expect(_body).to.have.property('error').to.equal('Adoption not found for deletion');
+  
+      });
+    });
     
     after(async () => {
       await requester.delete(`/api/pets/${petMock._id}`);
       await requester.delete(`/api/users/${userMock._id}`);
-      await requester.delete(`/api/adoptions/${adoptionTestId}`);
     });
   })
 })
