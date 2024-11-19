@@ -28,6 +28,8 @@ const createAdoption = async(req,res)=>{
 
 const deleteAdoption = async(req,res) => {
     const adoptionId = req.params.aid;
+    const adoption = await adoptionsService.getBy({_id:adoptionId})
+    if(!adoption) return res.status(404).send({status:"error",error:"Adoption not found for deletion"})
     const result = await adoptionsService.delete(adoptionId);
     res.send({status:"success",message:"Adoption deleted"})
 }
