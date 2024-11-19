@@ -1,6 +1,5 @@
 import supertest from 'supertest';
 import chai from 'chai';
-import mongoose from 'mongoose';
 
 const expect = chai.expect;
 
@@ -13,7 +12,7 @@ describe('AdoptMe Testing', () => {
     let adoptionTestId = '';
 
     before( async () => {
-       const {statusCode, ok, _body } = await requester.post(`/api/mocks/generateData`).send({
+       await requester.post(`/api/mocks/generateData`).send({
         "users": 1,
         "pets": 1
       });
@@ -81,15 +80,13 @@ describe('AdoptMe Testing', () => {
         expect(_body).to.have.property('status').to.equal('success');
         expect(_body).to.have.property('payload');
         expect(Array.isArray(_body.payload)).to.be.true;
-  
-        // console.log(_body.payload);
-  
+    
         adoptionTestId = _body.payload[0]._id;
       });
     });
 
     describe('Endpoint GET /:aid', async () => {
-      it('Enpoint GET /:aid gets all specific successfully, after GET / has been done', async () => {
+      it('Enpoint GET /:aid gets specific adoption successfully, after GET / has been done', async () => {
 
         const {statusCode, ok, _body } = await requester.get(`/api/adoptions/${adoptionTestId}`);
   
@@ -98,15 +95,15 @@ describe('AdoptMe Testing', () => {
         expect(_body).to.have.property('status').to.equal('success');
         expect(_body).to.have.property('payload');
         expect(_body.payload).to.have.property('_id').to.equal(adoptionTestId);
-        // expect(_body.payload).to.have.property('owner').to.equal(userMock._id);
-        // expect(_body.payload).to.have.property('pet').to.equal(petMock._id);
+        expect(_body.payload).to.have.property('owner').to.equal(userMock._id);
+        expect(_body.payload).to.have.property('pet').to.equal(petMock._id);
   
       });
   
       it('Enpoint GET /:aid fails when adoption is not in database', async () => {
-        adoptionTestId = "673beb9dc53dcb2d396a0000"
+        const unexistingAdoptionId = "673beb9dc53dcb2d396a0000"
   
-        const {statusCode, ok, _body } = await requester.get(`/api/adoptions/${adoptionTestId}`);
+        const {statusCode, ok, _body } = await requester.get(`/api/adoptions/${unexistingAdoptionId}`);
   
         expect(statusCode).to.equal(404);
         expect(ok).to.be.false;
@@ -120,7 +117,7 @@ describe('AdoptMe Testing', () => {
     after(async () => {
       await requester.delete(`/api/pets/${petMock._id}`);
       await requester.delete(`/api/users/${userMock._id}`);
-      //await mongoose.disconnect()
+      await requester.delete(`/api/adoptions/${adoptionTestId}`);
     });
   })
 })
