@@ -26,8 +26,15 @@ const createAdoption = async(req,res)=>{
     res.send({status:"success",message:"Pet adopted"})
 }
 
+const deleteAdoption = async(req,res) => {
+    const adoptionId = req.params.aid;
+    const result = await adoptionsService.delete(adoptionId);
+    res.send({status:"success",message:"Adoption deleted"})
+}
+
 export default {
     createAdoption,
     getAllAdoptions,
-    getAdoption
+    getAdoption,
+    deleteAdoption
 }
