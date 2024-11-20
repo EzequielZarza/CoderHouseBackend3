@@ -1,5 +1,5 @@
 #Se toma la imagen base Node de Docker Hub
-FROM node
+FROM node:18
 
 #Se crea carpeta interna donde el projecto sera guardado
 WORKDIR /app
